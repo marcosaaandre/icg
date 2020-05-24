@@ -7,6 +7,4 @@
 #include "core.h"
 #include "mygl.h"
 
-GLuint tex;
-
 #endif  // MAIN_H
