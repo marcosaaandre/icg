@@ -17,9 +17,9 @@
 
 // Array contendo as coordenadas X,Y e Z de tres vertices (um trianglulo).
 float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f};
+    -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f}; 
 
 char* frag_shader_source = NULL;
 char* vertex_shader_source = NULL;
@@ -188,12 +188,15 @@ int main(int argc, char** argv) {
     // Vincula o buffer criado a um Vertex Buffer Object (VBO)
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    // Carrega os dados no VBO
+    // Carrega as propriedades (coordenadas + cores) dos vértices no VBO
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // Determina as propriedades do array de tributos
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Atributo 'posição' do vértice
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Atributo 'cor' do vértice
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Define a cor a ser utilizada para limpar o color buffer a cada novo frame
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);            
