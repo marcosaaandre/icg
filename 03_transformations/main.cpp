@@ -16,10 +16,12 @@
 #define IMAGE_HEIGHT 512 // Altura da janela OpenGL em pixels.
 
 // Array contendo as coordenadas X,Y e Z de tres vertices (um trianglulo).
-float vertices[] = {
-    -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-    0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-    0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f}; 
+float vertices[] = {-0.5f, -0.5f, -0.1f, 0.75f, 0.0f, 0.0f, // red triangle (closer)
+                     0.0f,  0.5f, -0.1f, 0.75f, 0.0f, 0.0f,
+                     0.5f, -0.5f, -0.1f, 0.75f, 0.0f, 0.0f,
+                    -1.0f, -0.5f, -0.4f, 0.0f, 0.0f, 0.75f, // blue triangle (farther)
+                    -0.5f,  0.5f, -0.4f, 0.0f, 0.0f, 0.75f,
+                     0.0f, -0.5f, -0.4f, 0.0f, 0.0f, 0.75f}; 
 
 char* frag_shader_source = NULL;
 char* vertex_shader_source = NULL;
@@ -62,30 +64,48 @@ void Display(void) {
     // Seleciona o Shader Program a ser utilizado.
     glUseProgram(shader_program);
 
-    float s_array[16] = {0.3f, 0.0f, 0.0f, 0.0f, 
-                         0.0f, 0.3f, 0.0f, 0.0f, 
-                         0.0f, 0.0f, 1.0f, 0.0f, 
-                         0.0f, 0.0f, 0.0f, 1.0f};
+    // Matriz Model ///////////////////////////////////////////////////////////
+    float model_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
+                             0.0f, 1.0f, 0.0f, 0.0f, 
+                             0.0f, 0.0f, 1.0f, 0.0f, 
+                             0.0f, 0.0f, 0.0f, 1.0f};
+    glm::mat4 model_mat = glm::make_mat4(model_array);
 
-    float t_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
-                         0.0f, 1.0f, 0.0f, 0.0f, 
-                         0.0f, 0.0f, 1.0f, 0.0f, 
-                         2.0f, 0.0f, 0.0f, 1.0f};
+    // Matriz View ////////////////////////////////////////////////////////////
+    float view_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
+                            0.0f, 1.0f, 0.0f, 0.0f, 
+                            0.0f, 0.0f, 1.0f, 0.0f, 
+                            0.0f, 0.0f, 0.0f, 1.0f};
 
-    glm::mat4 s_mat = glm::make_mat4(s_array);
-    glm::mat4 t_mat = glm::make_mat4(t_array);
+    glm::mat4 view_mat = glm::make_mat4(view_array);
 
-    glm::mat4 model_mat = s_mat * t_mat;
+    // Matriz Projection //////////////////////////////////////////////////////
+    float proj_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
+                            0.0f, 1.0f, 0.0f, 0.0f, 
+                            0.0f, 0.0f, 1.0f, 0.0f, 
+                            0.0f, 0.0f, 0.0f, 1.0f};
+
+    glm::mat4 proj_mat = glm::make_mat4(proj_array);
+
+    // Thr NDC is a left handed system, so we flip along the Z axis.
+    float flip_z_array[16] = {1.0f, 0.0f,  0.0f, 0.0f, 
+                              0.0f, 1.0f,  0.0f, 0.0f, 
+                              0.0f, 0.0f, -1.0f, 0.0f, 
+                              0.0f, 0.0f,  0.0f, 1.0f};
+    glm::mat4 flip_z_mat = glm::make_mat4(flip_z_array);
+
+    // Matriz ModelViewProjection /////////////////////////////////////////////
+    glm::mat4 model_view_proj_mat = flip_z_mat * proj_mat * view_mat * model_mat;
 
     unsigned int transformLoc;
     GL_CHECK(transformLoc = glGetUniformLocation(shader_program, "transform"));
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model_mat));
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model_view_proj_mat));
 
     // Ativa o Vertex Array Object selecionado.
     glBindVertexArray(vao);
 
     // Desenha as tres primeiras primitivias, comecando pela de indice 0.
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glFlush();            //
     glutSwapBuffers();    //
@@ -229,6 +249,9 @@ int main(int argc, char** argv) {
 
     // Define a cor a ser utilizada para limpar o color buffer a cada novo frame
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);            
+
+    // Habilita o teste de profundidade (oclusão).
+    GL_CHECK(glEnable(GL_DEPTH_TEST));
 
     atexit(ExitProg);          // deifne o callback de saída do programa
     glutDisplayFunc(Display);  // define o callback que renderizará cada frame
