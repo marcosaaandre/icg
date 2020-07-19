@@ -148,7 +148,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(100, 100);
 
     // Título da janela
-    glutCreateWindow("Modern OpenGL: Ex3");
+    glutCreateWindow("Modern OpenGL: Assignment 3");
 
     // Load the OpenGL extensions
     GLenum err = glewInit();
