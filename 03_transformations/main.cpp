@@ -65,7 +65,7 @@ void Display(void) {
     glUseProgram(shader_program);
 
     // Matriz Model ///////////////////////////////////////////////////////////
-    // You will have to change the contents of this matrix for the exercises 1 and 4
+    // You will have to change the contents of this matrix for the exercises
     float model_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
                              0.0f, 1.0f, 0.0f, 0.0f, 
                              0.0f, 0.0f, 1.0f, 0.0f, 
@@ -73,7 +73,7 @@ void Display(void) {
     glm::mat4 model_mat = glm::make_mat4(model_array);
 
     // Matriz View ////////////////////////////////////////////////////////////
-    // You will have to change the contents of this matrix for the exercises 3 and 4    
+    // You will have to change the contents of this matrix for the exercises
     float view_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
                             0.0f, 1.0f, 0.0f, 0.0f, 
                             0.0f, 0.0f, 1.0f, 0.0f, 
@@ -82,7 +82,7 @@ void Display(void) {
     glm::mat4 view_mat = glm::make_mat4(view_array);
 
     // Matriz Projection //////////////////////////////////////////////////////
-    // You will have to change the contents of this matrix for the exercises 2 and 4
+    // You will have to change the contents of this matrix for the exercises
     float proj_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
                             0.0f, 1.0f, 0.0f, 0.0f, 
                             0.0f, 0.0f, 1.0f, 0.0f, 
