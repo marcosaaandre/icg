@@ -16,12 +16,12 @@
 #define IMAGE_HEIGHT 512 // Altura da janela OpenGL em pixels.
 
 // Array contendo as coordenadas X,Y e Z de tres vertices (um trianglulo).
-float vertices[] = {-0.5f, -0.5f, -0.1f, 0.75f, 0.0f, 0.0f, // red triangle (closer)
-                     0.0f,  0.5f, -0.1f, 0.75f, 0.0f, 0.0f,
-                     0.5f, -0.5f, -0.1f, 0.75f, 0.0f, 0.0f,
-                    -1.0f, -0.5f, -0.4f, 0.0f, 0.0f, 0.75f, // blue triangle (farther)
-                    -0.5f,  0.5f, -0.4f, 0.0f, 0.0f, 0.75f,
-                     0.0f, -0.5f, -0.4f, 0.0f, 0.0f, 0.75f}; 
+float vertices[] = {-0.25f, -0.5f, -0.1f, 0.75f, 0.0f, 0.0f, // red triangle (closer)
+                     0.25f,  0.5f, -0.1f, 0.75f, 0.0f, 0.0f,
+                     0.75f, -0.5f, -0.1f, 0.75f, 0.0f, 0.0f,
+                    -0.75f, -0.5f, -0.4f, 0.0f, 0.0f, 0.75f, // blue triangle (farther)
+                    -0.25f,  0.5f, -0.4f, 0.0f, 0.0f, 0.75f,
+                     0.25f, -0.5f, -0.4f, 0.0f, 0.0f, 0.75f}; 
 
 char* frag_shader_source = NULL;
 char* vertex_shader_source = NULL;
@@ -65,6 +65,7 @@ void Display(void) {
     glUseProgram(shader_program);
 
     // Matriz Model ///////////////////////////////////////////////////////////
+    // You will have to change the contents of this matrix for the exercises 1 and 4
     float model_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
                              0.0f, 1.0f, 0.0f, 0.0f, 
                              0.0f, 0.0f, 1.0f, 0.0f, 
@@ -72,6 +73,7 @@ void Display(void) {
     glm::mat4 model_mat = glm::make_mat4(model_array);
 
     // Matriz View ////////////////////////////////////////////////////////////
+    // You will have to change the contents of this matrix for the exercises 3 and 4    
     float view_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
                             0.0f, 1.0f, 0.0f, 0.0f, 
                             0.0f, 0.0f, 1.0f, 0.0f, 
@@ -80,6 +82,7 @@ void Display(void) {
     glm::mat4 view_mat = glm::make_mat4(view_array);
 
     // Matriz Projection //////////////////////////////////////////////////////
+    // You will have to change the contents of this matrix for the exercises 2 and 4
     float proj_array[16] = {1.0f, 0.0f, 0.0f, 0.0f, 
                             0.0f, 1.0f, 0.0f, 0.0f, 
                             0.0f, 0.0f, 1.0f, 0.0f, 
@@ -88,6 +91,7 @@ void Display(void) {
     glm::mat4 proj_mat = glm::make_mat4(proj_array);
 
     // Thr NDC is a left handed system, so we flip along the Z axis.
+    // IMPORTANT: Do not change the contents of this matrix!!!!!!
     float flip_z_array[16] = {1.0f, 0.0f,  0.0f, 0.0f, 
                               0.0f, 1.0f,  0.0f, 0.0f, 
                               0.0f, 0.0f, -1.0f, 0.0f, 
@@ -144,7 +148,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(100, 100);
 
     // Título da janela
-    glutCreateWindow("Simple OpenGL");
+    glutCreateWindow("Modern OpenGL: Ex3");
 
     // Load the OpenGL extensions
     GLenum err = glewInit();
