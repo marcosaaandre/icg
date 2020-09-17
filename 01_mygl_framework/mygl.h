@@ -1,6 +1,8 @@
 #ifndef MYGL_H
 #define MYGL_H
 
+#include <string.h>
+
 #include "core.h"
 #include "frame_buffer.h"
 
